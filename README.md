@@ -32,17 +32,187 @@ Jelly Order helps small business owners cut costs and closes the digital gap for
 
 > This repository is a fork of the team's backend. The frontend lives in a separate team repository.
 
+## 🙋 My role — Hyeseong Bak
+
+I was the **top contributor to the backend (194 of 556 non-merge commits)** and owned the **menu, category, option, and ingredient (inventory) domains** that power the owner console, plus the **real-time menu-status pipeline** to the table tablets.
+
+**Menu catalog and options**
+- Designed the menu domain end to end: menus, categories, and a **main option → sub option** model with four selection types (`REQUIRED_SINGLE`, `REQUIRED_MULTIPLE`, `OPTIONAL_SINGLE`, `OPTIONAL_MULTIPLE`) validated whenever a menu is created or edited.
+- Built create / read / update / delete APIs for menus and categories, with separate **owner (admin) and customer views** of the same menu.
+- Rewrote option syncing on menu edit as an **upsert + soft delete**, so editing a menu never breaks past orders that reference old options.
+- Implemented multipart menu updates with **S3 image replacement** (UUID-based object names, upload and delete).
+
+**Ingredient-linked inventory and automatic sold-out**
+- Modeled ingredients and a `MenuIngredient` join entity (composite key) so each menu knows exactly which ingredients it depends on.
+- Ingredients move through `SUFFICIENT → INSUFFICIENT → EXHAUSTED`. When one becomes `EXHAUSTED`, every menu that uses it is **automatically marked `OUT_OF_STOCK`** and the change is pushed to tablets.
+- Restoring is careful: a menu goes back `ON_SALE` only if **no other ingredient it needs is exhausted**, it has not hit its sales limit, and the owner did not mark it sold out manually (`SOLD_OUT_MANUAL`).
+- Deleting an ingredient returns the list of menus it affects, so the owner sees the impact before it happens.
+- Added **sales limits**: once a menu hits its limit during ordering it flips to `OUT_OF_STOCK` and the change is broadcast.
+- Applied **soft delete** to menus, categories, and options, and blocked deletions while a table that ordered the item is still eating (`EATING`).
+
+**Real-time menu status (Redis Pub/Sub → SSE)**
+- Menu status changes are published only **after the database transaction commits** (`@TransactionalEventListener(AFTER_COMMIT)`), so tablets never see a state that was rolled back.
+- Events go to a per-store Redis channel (`tablet-menu-status:{storeId}`), and every backend instance relays them to its connected tablets over **SSE**.
+- Built a **per-store SSE hub** (emitter registry, room broadcast) with a dedicated **heartbeat scheduler** that keeps idle connections alive.
+
+**Foundations and security**
+- Created the shared UUID-based base entities (`BaseIdEntity`, `BaseIdAndTimeEntity`) used across the codebase.
+- Moved the menu, category, and ingredient APIs from client-sent `storeId` to the **store ID inside the JWT**, so an owner can only touch their own store's data.
+- Unified duplicate-resource and invalid-UUID error handling into common exception handlers.
+- Set up the team's PR template and wrote the project README and feature test documentation.
+
+
+## 🔍 How it works
+
+A tour of the backend for engineers: how a single order travels through the system, and the decisions behind it.
+
+### Architecture
+
+```mermaid
+flowchart LR
+    T[Table tablet<br/>Vue] -- "STOMP orders" --> API
+    O[Owner console<br/>Vue] -- "REST + SSE" --> API
+    subgraph EKS["Amazon EKS (HPA 1–3 pods)"]
+        API[Spring Boot API<br/>JWT · REST · STOMP · SSE]
+    end
+    API <--> R[(Redis<br/>Pub/Sub · tokens · counters)]
+    API --> DB[(MariaDB<br/>RDS / Aurora)]
+    API --> S3[(S3 + CloudFront<br/>menu images)]
+    API --> KP[[KakaoPay API]]
+    API --> NTS[[ODcloud business<br/>registration API]]
+    API --> SMTP[[Gmail SMTP]]
+```
+
+The backend is one Spring Boot service, but it is built to run as **several pods behind a load balancer**: every real-time message goes through Redis Pub/Sub, so a tablet connected to pod A still hears about an order that pod B processed.
+
+### The life of an order
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Tab as Table tablet
+    participant Pod as API pod (any)
+    participant DB as MariaDB
+    participant Redis as Redis Pub/Sub
+    participant All as Every API pod
+    participant Own as Owner console
+
+    Tab->>Pod: STOMP SEND /publish/{storeId}/orders
+    Pod->>DB: Pass 1 — validate every item (sold out? enough left under the sales limit?)
+    alt any item fails
+        Pod-->>Tab: /topic/{tableId} ack {ok:false, all problems listed at once}
+    else all items OK
+        Pod->>DB: Pass 2 — save order, add to the table's running bill, bump salesToday
+        Pod->>Redis: INCR per-store order number
+        Pod-->>Tab: /topic/{tableId} ack {ok:true, order}
+        Pod->>Redis: PUBLISH "order"
+        Redis-->>All: message
+        All-->>Own: /topic/{storeId} new order
+        opt a menu just hit its sales limit
+            Pod->>Redis: PUBLISH tablet-menu-status:{storeId} (after commit)
+            Redis-->>All: message
+            All-->>Tab: SSE menu-status → item greys out on every tablet
+        end
+    end
+```
+
+Details that matter:
+
+- **Two-pass validation.** The first pass only checks; it collects *every* sold-out item and every item without enough remaining quantity, then rejects the order with one clear message ("Sold out: A, B / Not enough left: C (2 remaining)"). Nothing is written until the whole cart is valid, so a customer never gets a half-placed order.
+- **Running bill per table.** Each order (`UnitOrder`) is attached to the table's open `TotalOrder`, whose totals are updated as items are added; the table switches to `EATING` on its first order.
+- **Per-table acknowledgements.** Each tablet subscribes to its own `/topic/{storeTableId}`, so success and failure messages go only to the device that ordered, while the owner console listens on `/topic/{storeId}`.
+- **Authenticated sockets.** A `ChannelInterceptor` verifies the JWT on the STOMP `CONNECT` frame and binds the tablet's table ID as the session principal.
+- **Order numbers from Redis.** Daily ticket numbers come from an atomic `INCR` on a per-store key, so two pods can never hand out the same number. The key is deleted at closing time and the next `INCR` starts again from 1.
+
+### Inventory and sold-out logic
+
+A menu's availability is decided by three independent reasons, and the code is careful never to let one reason undo another:
+
+```mermaid
+stateDiagram-v2
+    [*] --> ON_SALE
+    ON_SALE --> OUT_OF_STOCK: a required ingredient becomes EXHAUSTED
+    ON_SALE --> OUT_OF_STOCK: salesToday reaches salesLimit
+    ON_SALE --> SOLD_OUT_MANUAL: owner marks it sold out
+    OUT_OF_STOCK --> ON_SALE: all ingredients available and under the sales limit
+    SOLD_OUT_MANUAL --> ON_SALE: owner puts it back on sale
+```
+
+- Ingredients move through `SUFFICIENT → INSUFFICIENT → EXHAUSTED`, and each menu is linked to the ingredients it needs (`MenuIngredient`).
+- When an ingredient comes back, a menu is restored only if **no other** required ingredient is still exhausted, it has not sold out its daily limit, and the owner did not turn it off by hand.
+- Every change is published **after the transaction commits** (`@TransactionalEventListener(AFTER_COMMIT)`), so tablets never show a state that was rolled back.
+
+### Real-time channels at a glance
+
+| Channel | Transport | Direction | Used for |
+|---|---|---|---|
+| `/publish/{storeId}/orders` | STOMP over WebSocket | tablet → server | placing orders |
+| `/topic/{storeTableId}` | STOMP | server → one tablet | order accepted / rejected |
+| `/topic/{storeId}` | STOMP (fanned out via Redis `order`) | server → owner console | new orders |
+| `tablet-menu-status:{storeId}` | Redis Pub/Sub → SSE | server → tablets | sold-out / back-on-sale |
+| `request-channel` | Redis Pub/Sub → SSE | tablet → owner console | customer requests (water, cutlery, …) |
+
+We used **WebSocket** where the client must send data and get an answer (ordering), and **SSE** where the server only pushes updates (menu status, requests). SSE connections are kept alive with a dedicated heartbeat scheduler.
+
+### Redis, split by responsibility
+
+Instead of one keyspace for everything, each concern gets its own logical database and its own `RedisTemplate`, which keeps keys from colliding and makes each concern easy to inspect or flush on its own.
+
+| DB | Purpose |
+|---|---|
+| 0 | default (primary `RedisTemplate`) |
+| 1 | store (owner) refresh tokens |
+| 2 | table-tablet refresh tokens |
+| 3 | password-reset verification codes |
+| 4 | per-store order-number counters |
+| 7 | SSE Pub/Sub (menu status, requests) |
+| 8 | order-table cache (Spring Cache) |
+
+### Two kinds of users, two kinds of tokens
+
+- **Owners** (`STORE`) sign up with a business registration number that is **verified against the National Tax Service data via the ODcloud API** before the account is created, then log in for access and refresh tokens.
+- **Table tablets** (`STORE_TABLE`) log in as a specific table and get their own token pair, with the table's UUID embedded in the claims.
+- Refresh tokens live in Redis (separate DBs per user type) and are validated on refresh; password reset uses a code sent by email and stored in Redis.
+- All owner-side APIs read the store ID **from the token**, not from the request, so one store cannot read or change another store's data.
+
+### Running the business day
+
+- **Open / close:** `POST /open-close/open` starts a business day; `close` is **refused while any payment is still `PENDING` or any order is still in progress**, so the day can't be closed with money in limbo. Closing resets the order-number counters and returns a summary of the day.
+- **Tables:** tables are grouped into zones and move through `STANDBY → EATING → PAY_DONE`; a zone (or a menu) cannot be deleted while a table in it is still eating.
+- **Payments:** KakaoPay QR (ready → QR scan → approval callback → redirect) or counter payment; each sale is `PENDING`, `COMPLETED`, or `CANCELLED`.
+- **Settlement dashboard:** today / last 7 days / this month gross sales, each compared with the previous period, plus daily, weekly, and monthly breakdowns.
+
+### Deployment
+
+| Piece | Details |
+|---|---|
+| CI/CD | GitHub Actions builds a Docker image, pushes it to **Amazon ECR**, and rolls out the deployment on **Amazon EKS** on every push to `main` |
+| Kubernetes | Deployment + Service, **Horizontal Pod Autoscaler** (1–3 replicas), Ingress, in-cluster Redis |
+| TLS | cert-manager `ClusterIssuer` + `Certificate` for HTTPS |
+| AWS | EKS, ECR, S3, CloudFront, RDS/Aurora, Route 53, Certificate Manager, IAM, VPC |
+
+Manifests live in [`k8s/`](k8s) and the pipeline in [`.github/workflows/`](.github/workflows).
+
+### Design decisions
+
+- **Validate everything, then write.** Two-pass order processing gives customers one complete error message and keeps the database consistent without partial orders.
+- **Publish after commit.** Real-time events are bridged from Spring application events to Redis only after the transaction commits, so the UI and the database never disagree.
+- **Never let one sold-out reason erase another.** Ingredient exhaustion, sales limits, and manual sold-out are tracked separately, and a menu comes back only when all three allow it.
+- **Redis for anything shared across pods.** Order numbers, refresh tokens, and real-time fan-out all live in Redis, which is what makes horizontal scaling on EKS safe.
+- **Trust the token, not the request.** Store and table identities come from JWT claims, never from IDs the client sends.
+
 ---
 
 ## Table of contents
 
+- [My role](#-my-role--hyeseong-bak)
+- [How it works](#-how-it-works)
 0. [Overview](#0-overview)
 1. [Project proposal](#1-project-proposal)
 2. [Tech stack](#2-tech-stack)
 3. [Analysis and design](#3-analysis-and-design)
 4. [Core technologies and implementation](#4-core-technologies-and-implementation)
-5. [Deployment](#5-deployment)
-6. [Feature test results](#6-feature-test-results)
+5. [Feature test results](#5-feature-test-results)
 
 ---
 
@@ -283,20 +453,7 @@ Academic, policy, and press sources agree that smart technologies such as unmann
 
 ---
 
-## 5. Deployment
-
-| Piece | Details |
-|---|---|
-| CI/CD | GitHub Actions builds a Docker image, pushes it to **Amazon ECR**, and rolls out the deployment on **Amazon EKS** on every push to `main` |
-| Kubernetes | Deployment + Service, **Horizontal Pod Autoscaler** (1–3 replicas), Ingress, in-cluster Redis |
-| TLS | cert-manager `ClusterIssuer` + `Certificate` for HTTPS |
-| AWS | EKS, ECR, S3, CloudFront, RDS/Aurora, Route 53, Certificate Manager, IAM, VPC |
-
-Manifests live in [`k8s/`](k8s) and the pipeline in [`.github/workflows/`](.github/workflows).
-
----
-
-## 6. Feature test results
+## 5. Feature test results
 
 > We verified the core features of the owner console and the table-order tablet. Each result is in a collapsible section with screenshots.
 
