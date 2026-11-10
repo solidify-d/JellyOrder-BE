@@ -1,130 +1,150 @@
 # Jelly Order 🍧
 
-### <img width="50" height="50" alt="팀 로고" src="https://github.com/user-attachments/assets/2c140acc-54f4-4b42-b0ba-a3bde1cf5743" /> 혜성충돌
-> **먼지와 암석, 얼음이 모여 혜성이 되었고, 우리는 세상을 향해 전속력으로 충돌합니다.**
+**A lightweight, open-source table-order and POS system for small restaurants.**
+
+Jelly Order helps small business owners cut costs and closes the digital gap for older and less tech-savvy customers: anyone can download, self-host, and customize it for free.
+
+> 🏆 **1st Place**, Hanwha Systems BEYOND SW Bootcamp (2nd team project, Sep 2025)
+
+### <img width="50" height="50" alt="Team logo" src="https://github.com/user-attachments/assets/2c140acc-54f4-4b42-b0ba-a3bde1cf5743" /> Team Comet Impact
+> *Dust, rock, and ice came together to form a comet, and we are colliding with the world at full speed.*
 
 <table>
   <tr>
     <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/98812214?s=120" width="120" height="120" alt="김형진"/><br />
-      <sub><b><a href="https://github.com/JeaPple" target="_blank" rel="noreferrer">김형진</a></b></sub>
+      <img src="https://avatars.githubusercontent.com/u/98812214?s=120" width="120" height="120" alt="JeaPple"/><br />
+      <sub><b><a href="https://github.com/JeaPple" target="_blank" rel="noreferrer">@JeaPple</a></b></sub>
     </td>
     <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/194198612?s=120" width="120" height="120" alt="김현지"/><br />
-      <sub><b><a href="https://github.com/ifunhy" target="_blank" rel="noreferrer">김현지</a></b></sub>
+      <img src="https://avatars.githubusercontent.com/u/194198612?s=120" width="120" height="120" alt="ifunhy"/><br />
+      <sub><b><a href="https://github.com/ifunhy" target="_blank" rel="noreferrer">@ifunhy</a></b></sub>
     </td>
     <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/149755774?s=120" width="120" height="120" alt="김진호"/><br />
-      <sub><b><a href="https://github.com/jinnn12" target="_blank" rel="noreferrer">김진호</a></b></sub>
+      <img src="https://avatars.githubusercontent.com/u/149755774?s=120" width="120" height="120" alt="jinnn12"/><br />
+      <sub><b><a href="https://github.com/jinnn12" target="_blank" rel="noreferrer">@jinnn12</a></b></sub>
     </td>
     <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/171583314?s=120" width="120" height="120" alt="박혜성"/><br />
-      <sub><b><a href="https://github.com/solidify-d" target="_blank" rel="noreferrer">박혜성</a></b></sub>
+      <img src="https://avatars.githubusercontent.com/u/171583314?s=120" width="120" height="120" alt="Hyeseong Bak"/><br />
+      <sub><b><a href="https://github.com/solidify-d" target="_blank" rel="noreferrer">Hyeseong Bak</a></b></sub>
     </td>
   </tr>
 </table>
 
+> This repository is a fork of the team's backend. The frontend lives in a separate team repository.
+
 ---
-## 0. 프로젝트 소개
+
+## Table of contents
+
+0. [Overview](#0-overview)
+1. [Project proposal](#1-project-proposal)
+2. [Tech stack](#2-tech-stack)
+3. [Analysis and design](#3-analysis-and-design)
+4. [Core technologies and implementation](#4-core-technologies-and-implementation)
+5. [Deployment](#5-deployment)
+6. [Feature test results](#6-feature-test-results)
+
+---
+
+## 0. Overview
 ![img.png](img.png)
 
-  <p align="center">
-      Jelly Order는 소상공인의 비용 부담과 디지털 격차 문제를 해결하기 위해,
-  </p>
-  
-  <p align="center">
-      누구나 쉽게 도입·운영할 수 있는 오픈소스 경량 테이블 오더·POS 시스템입니다.
-  </p>
-
-
----
-## 1. 프로젝트 기획서
-
-<details>
-<summary>프로젝트 개요</summary>
-
-Jelly Order는 소상공인을 위한 경량형 오픈소스 테이블 오더·경량 POS 시스템이다. 상용 솔루션의 초기 설치비·월 구독료·PG 수수료 등 비용 장벽과, 고령층·IT 비숙련자에게 어려운 복잡한 UI를 핵심 문제로 규정하고, 직관적·대형 폰트 기반 UI/UX와 수수료 락인 없는 아키텍처(VAN/현금/기본 카드 단말 연동 중심)를 제공한다. 이를 통해 점주는 더 단순한 POS 운영 경험, 고객은 쉽고 빠른 주문 경험을 얻으며, 누구나 코드와 문서를 내려받아 무상으로 자체 설치·개조할 수 있도록 오픈소스로 배포한다. 비용 부담과 디지털 격차가 실제 현장에서 도입 저해 요인으로 보고되고 있음을 전제로 설계하였다.
-
-</details>
-
----
-
-<details>
-<summary>프로젝트 배경</summary>
-
 <p align="center">
-  <img width="800" alt="image" src="https://github.com/user-attachments/assets/832ac568-cf29-438f-b520-9b87d1e6ef6e" />
+  Jelly Order is an open-source, lightweight table-order and POS system that any small business can adopt and run easily,
+</p>
+<p align="center">
+  built to tackle two problems: the cost burden on small business owners and the digital divide.
 </p>
 
-### 1) 비용 장벽과 수수료 구조의 불투명성
-테이블오더 확산은 인건비 절감을 배경으로 빠르게 진행되었으나, **PG 연동에 따른 높은 결제 수수료(대개 0.8~2.5% 이상)**, **월 구독료·통신비·장비비** 등으로 기대 절감액보다 **고정지출이 커지는 사례**가 다수 보도되었다. 일부 사업장은 **의무사용·위약금** 등 계약 리스크도 경험한다. 업계·언론 보도는 **VAN 위주 결제 대비 PG 경유 시 월 수십만 원~연 수백만 원 추가 비용**이 발생할 수 있음을 지적한다. 또한 법·제도상 **PG 수수료에 대한 제한이나 표준화가 미흡**하다는 점도 반복적으로 제기되고 있다. [YTN](https://www.ytn.co.kr/_ln/0102_202410181024214328)[서울경제](https://www.sedaily.com/NewsView/2DFEDQEVRN)[네이트 뉴스](https://news.nate.com/view/20240108n02405)
-
-> 예시: 월매출 2,000만 원 업장에서 PG 3.3% + 서비스 0.6% ≈ 3.9%로 월 78만 원 수준의 수수료가 발생했다는 보도 사례가 확인된다. 정부 지원으로 설치했더라도 운영 수수료 부담은 영세사업자 몫이라는 점도 지적되었다. 네이트 뉴스
-
-정부·유관기관도 최근에는 **결제기기 수수료 안내 및 계약 전 유의사항**을 배포하며 자율 예방을 독려하고 있으나, **도입 이후의 비용 구조 최적화**는 여전히 점주에게 과도하게 전가되는 양상이다. [소상공인24](https://www.sbiz.or.kr/smst/bbs/view.do?bbsSn=6840&key=211130603916)
-
 ---
 
-### 2) 고령층·IT 비숙련자 사용성 문제
-고령층은 **작은 글씨·복잡한 화면 흐름·결제 오류 대응 난이도**로 인해 디지털 주문 채널 이용을 **포기하거나 직원 의존**이 잦다는 탐방·설문 결과가 다수 보고된다. 서울시 조사 등에서도 **기기 이용률 저조·심리적 부담**이 확인되며, **교육·큰 글씨·음성안내** 등 보조 설계 시 **적응이 빠르게 개선**된 사례가 보고되었다. 이는 UI의 직관성·접근성(가독성, 단계 축소, 용어 단순화)이 도입 성패를 좌우함을 시사한다. [브라보마이라이프](https://bravo.etoday.co.kr/view/atc_view/13547)
+## 1. Project proposal
 
----
+<details>
+<summary>Project summary</summary>
 
-### 3) 디지털 전환의 필요와 현실 간 간극
-학술·정책·언론 자료는 무인주문·스마트오더·키오스크 등 **스마트 기술이 소상공인 운영 효율에 기여**함을 인정하는 동시에, **도입·운영 비용과 투자 부담**, **연령대별 디지털 격차**가 보급의 병목임을 제시한다. Jelly Order는 **오픈소스 배포·저비용 도입·고령친화 UI**로 이 간극을 해소하고자 한다. [KCI](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002995983)
+Jelly Order is a lightweight, open-source table-order and POS system for small businesses. We defined two core problems: the **cost barrier** of commercial solutions (installation fees, monthly subscriptions, and payment-gateway (PG) fees) and **complex UIs** that are hard for older adults and non-technical users. In response, Jelly Order offers an intuitive, large-font UI/UX and a lock-in-free architecture centered on VAN, cash, and standard card terminals. Owners get a simpler POS experience, customers get a faster and easier way to order, and because the code and documentation are open source, anyone can install and modify it for free. The design assumes, as field reports show, that cost and the digital divide are the main barriers to adoption.
 
 </details>
 
 ---
 
 <details>
-<summary>목표 및 목적</summary>
+<summary>Background</summary>
 
-### 1) 최상위 목적(미션)
-- **비용 장벽 제거:** 오픈소스로 공개하여 **초기비용·구독료 부담 없이** 자체 호스팅·로컬 설치를 가능하게 한다. **PG 락인 회피**와 **VAN/기존 카드단말·현금결제 연동**을 우선시해 수수료 부담을 최소화한다. [소상공인24](https://www.sbiz.or.kr/smst/bbs/view.do?bbsSn=6840&key=211130603916)
-- **디지털 격차 완화:** 대형 폰트·높은 대비·명료한 한국어 용어·단계 최소화 설계를 통해 **고령층·IT 비숙련자**도 스스로 주문·결제가 가능하도록 한다. [브라보마이라이프](https://bravo.etoday.co.kr/view/atc_view/13547)
+<p align="center">
+  <img width="800" alt="Background" src="https://github.com/user-attachments/assets/832ac568-cf29-438f-b520-9b87d1e6ef6e" />
+</p>
 
----
+### 1) Cost barriers and opaque fee structures
+Table ordering spread quickly as a way to save on labor, but many reports describe cases where **high payment fees from PG integration (usually 0.8–2.5% or more)** plus **monthly subscriptions, network fees, and hardware costs** ended up costing more than the labor they saved. Some businesses also face contract risks such as **mandatory usage periods and cancellation penalties**. Industry and press reports point out that routing payments through a PG instead of a VAN can add **hundreds of thousands of won per month, or millions of won per year**, and that **PG fees are not capped or standardized** by law. [YTN](https://www.ytn.co.kr/_ln/0102_202410181024214328) · [Seoul Economic Daily](https://www.sedaily.com/NewsView/2DFEDQEVRN) · [Nate News](https://news.nate.com/view/20240108n02405)
 
-### 2) 이해관계자별 목표
-- **점주(매장) 관점**
-  - 설치·학습·운영이 **쉬운 경량 POS 콘솔** 제공(메뉴·재고·품절·좌석/테이블 관리 최소 클릭 흐름).
-- **고객(사용자) 관점**
-  - 노령친화 모드(글자 크게/버튼 크게/음성 힌트/오류 복구 유도)로 주문 포기율 감소.
-  - **5클릭 이하 주문**(카테고리→메뉴→옵션→수량→결제)으로 인지부하 최소화. [브라보마이라이프](https://bravo.etoday.co.kr/view/atc_view/13547)
+> Example: one report describes a shop with ₩20M in monthly sales paying PG 3.3% + service 0.6% ≈ 3.9%, about ₩780K per month in fees. Even when the government subsidized installation, the ongoing fees fell on the small business owner. (Nate News)
+
+Government agencies now publish **guidance on payment-device fees and what to check before signing a contract**, but **optimizing costs after adoption** is still left largely to owners. [Sobaek24](https://www.sbiz.or.kr/smst/bbs/view.do?bbsSn=6840&key=211130603916)
 
 ---
 
-### 3) 정량 KPI(초기 제안)
-- **도입비 절감**: 상용 대비 **초기 CAPEX 80% 이상 절감**(오픈소스·상용 태블릿 활용 전제, 장비비만 부담). 근거: 상용은 **월 구독료+PG 수수료**로 누적 비용이 커지는 구조가 다수 보고. [YTN](https://www.ytn.co.kr/_ln/0102_202410181024214328)[서울경제](https://www.sedaily.com/NewsView/2DFEDQEVRN)
-- **수수료 최적화**: **VAN/직접 정산** 우선 구성 시 **PG 추가 수수료 0~최소화**를 목표(매장 계약 환경에 따라 변동). [서울경제](https://www.sedaily.com/NewsView/2DFEDQEVRN)
-- **주문 성공률**: **노령친화 UI** 도입 매장 기준 **주문 포기율(결제 전 이탈) 30%↓** 목표. 관련 탐방·조사에서 고령층의 사용 포기 및 심리적 부담이 높은 것으로 확인. [브라보마이라이프](https://bravo.etoday.co.kr/view/atc_view/13547)
-- **학습 곡선**: 점주 대상 **초기 온보딩 30분 내 기본 운영 가능**(메뉴 등록·품절 처리·영수증 확인).
+### 2) Usability for older and non-technical users
+Field visits and surveys repeatedly show that older adults **give up on digital ordering or rely on staff** because of **small text, complex screen flows, and difficulty recovering from payment errors**. A Seoul city survey also found **low device usage and psychological burden**, while **training, large text, and voice guidance** helped people adapt quickly. This suggests that an intuitive, accessible UI (readability, fewer steps, simpler wording) decides whether adoption succeeds. [Bravo My Life](https://bravo.etoday.co.kr/view/atc_view/13547)
 
 ---
 
-### 4) 핵심 기능 범위(요약)
-- **점주 콘솔**: 메뉴/옵션/가격, 테이블·좌석, 재고/품절(재료 연동), 주문 현황, 정산 리포트(수수료 시뮬레이터 포함).
-- **고객 UI**: **대형 폰트·단순 레이아웃**, 고대비 테마, **오류 복구 안내**, 결제 유도 최소 단계. [브라보마이라이프](https://bravo.etoday.co.kr/view/atc_view/13547)
-- **결제 연동**: **VAN/기존 카드단말·현금 결제** 기본, 필요 시 **PG 연동 선택적 제공**(수수료 경고/비교 안내). [서울경제](https://www.sedaily.com/NewsView/2DFEDQEVRN)
-- **배포·운영**: 오픈소스 공개, **도커·자체 호스팅 템플릿**, 설치 자동화 스크립트, 운영 가이드/보안 체크리스트.
+### 3) The gap between the need for digital transformation and reality
+Academic, policy, and press sources agree that smart technologies such as unmanned ordering, smart ordering, and kiosks **improve small-business efficiency**, but they also name **adoption and operating costs** and the **age-based digital divide** as bottlenecks. Jelly Order aims to close this gap with **open-source distribution, low-cost adoption, and an age-friendly UI**. [KCI](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002995983)
 
 </details>
 
 ---
 
 <details>
-<summary>문제정의 요약(자료 근거)</summary>
+<summary>Goals and objectives</summary>
 
-- **수수료·운영비 부담**이 인건비 절감을 상쇄하는 사례 다수, **PG 수수료 상한 부재**·계약 리스크 지적. → 비용 장벽 해소 필요. [YTN](https://www.ytn.co.kr/_ln/0102_202410181024214328) [서울경제](https://www.sedaily.com/NewsView/2DFEDQEVRN) [네이트 뉴스](https://news.nate.com/view/20240108n02405)
-- **고령층·비숙련자 사용성 한계**가 도입/이용 저해. **큰 글씨·음성·단계 축소** 지원 시 적응 개선. → 접근성 중심 설계 필요. [브라보마이라이프](https://bravo.etoday.co.kr/view/atc_view/13547)
-- 학술·정책 연구는 **스마트 기술의 효용**과 함께 **도입·투자 부담**을 병목으로 지적. → **오픈소스·저비용·자체 설치** 모델의 공공적 가치. [KCI](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002995983)
+### 1) Mission
+- **Remove the cost barrier:** release as open source so owners can self-host or install locally **without upfront costs or subscriptions**, and minimize fees by **avoiding PG lock-in** and prioritizing **VAN, existing card terminals, and cash**. [Sobaek24](https://www.sbiz.or.kr/smst/bbs/view.do?bbsSn=6840&key=211130603916)
+- **Narrow the digital divide:** large fonts, high contrast, plain wording, and minimal steps so that **older and non-technical users** can order and pay on their own. [Bravo My Life](https://bravo.etoday.co.kr/view/atc_view/13547)
+
+---
+
+### 2) Goals by stakeholder
+- **Owners (stores)**
+  - A **lightweight POS console** that is easy to install, learn, and run, with minimal-click flows for menus, inventory, sold-out items, and seats/tables.
+- **Customers**
+  - A senior-friendly mode (larger text and buttons, voice hints, guided error recovery) to reduce abandoned orders.
+  - **Ordering in 5 clicks or fewer** (category → menu → options → quantity → pay) to keep cognitive load low. [Bravo My Life](https://bravo.etoday.co.kr/view/atc_view/13547)
+
+---
+
+### 3) Target KPIs (initial proposal)
+- **Lower adoption cost:** **80%+ less upfront CAPEX** than commercial systems (open source on off-the-shelf tablets; owners pay only for hardware). Commercial systems are widely reported to accumulate costs through **subscriptions + PG fees**. [YTN](https://www.ytn.co.kr/_ln/0102_202410181024214328) · [Seoul Economic Daily](https://www.sedaily.com/NewsView/2DFEDQEVRN)
+- **Lower fees:** aim for **zero to minimal extra PG fees** by preferring **VAN / direct settlement** (depends on each store's contracts). [Seoul Economic Daily](https://www.sedaily.com/NewsView/2DFEDQEVRN)
+- **Order success rate:** **30% fewer abandoned orders** (drop-off before payment) in stores using the senior-friendly UI. Surveys show high abandonment and psychological burden among older users. [Bravo My Life](https://bravo.etoday.co.kr/view/atc_view/13547)
+- **Learning curve:** owners can run the basics (register menus, mark sold-out items, check receipts) **within 30 minutes of onboarding**.
+
+---
+
+### 4) Core feature scope
+- **Owner console:** menus, options, and prices; tables and seats; inventory and sold-out status linked to ingredients; live orders; settlement reports (including a fee simulator).
+- **Customer UI:** **large fonts and simple layouts**, high-contrast theme, **error-recovery guidance**, and as few payment steps as possible. [Bravo My Life](https://bravo.etoday.co.kr/view/atc_view/13547)
+- **Payments:** **VAN / existing card terminals / cash** by default, with **optional PG integration** (with fee warnings and comparisons). [Seoul Economic Daily](https://www.sedaily.com/NewsView/2DFEDQEVRN)
+- **Deployment and operations:** open-source release, **Docker and self-hosting templates**, install automation scripts, and an operations guide / security checklist.
+
+</details>
+
+---
+
+<details>
+<summary>Problem statement (with sources)</summary>
+
+- **Fees and operating costs** often cancel out labor savings, and there is **no cap on PG fees** plus contract risk → the cost barrier must go. [YTN](https://www.ytn.co.kr/_ln/0102_202410181024214328) · [Seoul Economic Daily](https://www.sedaily.com/NewsView/2DFEDQEVRN) · [Nate News](https://news.nate.com/view/20240108n02405)
+- **Usability limits for older and non-technical users** block adoption, while **large text, voice, and fewer steps** improve it → accessibility-first design. [Bravo My Life](https://bravo.etoday.co.kr/view/atc_view/13547)
+- Research recognizes the **value of smart technology** but names **adoption and investment costs** as the bottleneck → an **open-source, low-cost, self-installed** model has public value. [KCI](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002995983)
 
 </details>
 
 <br>
 
-## 2. 기술 스택
+## 2. Tech stack
 
 ### Backend
 ![Java 17](https://img.shields.io/badge/Java%2017-007396?style=for-the-badge&logo=openjdk&logoColor=white)
@@ -137,7 +157,6 @@ Jelly Order는 소상공인을 위한 경량형 오픈소스 테이블 오더·�
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
 ![SSE](https://img.shields.io/badge/SSE%20(Server--Sent%20Events)-000000?style=for-the-badge&logo=fastapi&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
-
 
 ### Frontend
 ![Vue.js](https://img.shields.io/badge/Vue.js%203-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
@@ -169,8 +188,7 @@ Jelly Order는 소상공인을 위한 경량형 오픈소스 테이블 오더·�
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![JMeter](https://img.shields.io/badge/Apache%20JMeter-D22128?style=for-the-badge&logo=apachejmeter&logoColor=white)
 
-
-###  Tools & Collaboration
+### Tools & Collaboration
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
@@ -179,92 +197,85 @@ Jelly Order는 소상공인을 위한 경량형 오픈소스 테이블 오더·�
 
 <br>
 
-## 3. 분석 및 설계
+## 3. Analysis and design
 
-### 요구사항 명세서 [상세보기](https://docs.google.com/spreadsheets/d/1lV6OYcvnEEBzQFvDyBVyoR1MRkYB52oj-mvlcYLXNRM/edit?gid=1096538882#gid=1096538882)
+> The linked design documents are written in Korean.
+
+### Requirements specification - [View](https://docs.google.com/spreadsheets/d/1lV6OYcvnEEBzQFvDyBVyoR1MRkYB52oj-mvlcYLXNRM/edit?gid=1096538882#gid=1096538882)
 <details>
-  <summary><b>요구사항 명세서</b></summary>
-<img width="1714" height="1863" alt="KakaoTalk_20250911_120034881" src="https://github.com/user-attachments/assets/c850eac9-e2e1-4006-bd64-32953ab91beb" />
+  <summary><b>Requirements specification</b></summary>
+<img width="1714" height="1863" alt="Requirements specification" src="https://github.com/user-attachments/assets/c850eac9-e2e1-4006-bd64-32953ab91beb" />
 </details>
 
-
-
-
-###  화면 설계서 - [상세보기](https://www.figma.com/design/WuBdoUWSz5n3gdSHdMN2qo/be16-4th-team?node-id=0-1&t=5D9WbMwwOTOxQaVj-1)
+### Screen design - [View in Figma](https://www.figma.com/design/WuBdoUWSz5n3gdSHdMN2qo/be16-4th-team?node-id=0-1&t=5D9WbMwwOTOxQaVj-1)
 <details>
-  <summary><b>점주 페이지</b></summary>
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/50a33d51-f4e6-4848-b90b-70fbc4c9f666" />
+  <summary><b>Owner console</b></summary>
+<img width="800" alt="Owner console design" src="https://github.com/user-attachments/assets/50a33d51-f4e6-4848-b90b-70fbc4c9f666" />
 </details>
 <details>
-  <summary><b>테이블 오더 페이지</b></summary>
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/c0bb2ccf-a485-407f-874e-c51e33b41423" />
+  <summary><b>Table-order tablet</b></summary>
+<img width="800" alt="Table-order design" src="https://github.com/user-attachments/assets/c0bb2ccf-a485-407f-874e-c51e33b41423" />
 </details>
 
-### ERD - [상세보기](https://www.erdcloud.com/d/fAJgKBWBde3CPAkgW)
+### ERD - [View in ERDCloud](https://www.erdcloud.com/d/fAJgKBWBde3CPAkgW)
 <details>
   <summary><b>ERD</b></summary>
-  <img width="3380" height="1629" alt="Jelly_Order" src="https://github.com/user-attachments/assets/6230dd70-a6f5-42a7-8c24-b7d5026507a5" />
+  <img width="3380" height="1629" alt="Jelly Order ERD" src="https://github.com/user-attachments/assets/6230dd70-a6f5-42a7-8c24-b7d5026507a5" />
 </details>
 
-### WBS - [상세보기](https://docs.google.com/spreadsheets/d/1lV6OYcvnEEBzQFvDyBVyoR1MRkYB52oj-mvlcYLXNRM/edit?gid=0#gid=0)
+### WBS - [View](https://docs.google.com/spreadsheets/d/1lV6OYcvnEEBzQFvDyBVyoR1MRkYB52oj-mvlcYLXNRM/edit?gid=0#gid=0)
 <details>
   <summary><b>WBS</b></summary>
-<img width="1420" height="648" alt="스크린샷 2025-08-26 오후 3 01 35" src="https://github.com/user-attachments/assets/bcfe1f43-44c1-418a-a2a6-12862316e928" />
+<img width="1420" height="648" alt="WBS" src="https://github.com/user-attachments/assets/bcfe1f43-44c1-418a-a2a6-12862316e928" />
 </details>
 
-### API 명세서 - [상세보기](https://docs.google.com/spreadsheets/d/1lV6OYcvnEEBzQFvDyBVyoR1MRkYB52oj-mvlcYLXNRM/edit?gid=394720298#gid=394720298)
+### API specification - [View](https://docs.google.com/spreadsheets/d/1lV6OYcvnEEBzQFvDyBVyoR1MRkYB52oj-mvlcYLXNRM/edit?gid=394720298#gid=394720298)
 <details>
-  <summary><b>API 명세서</b></summary>
-<img width="1665" height="1389" alt="image" src="https://github.com/user-attachments/assets/b51c1360-2863-459b-a3d7-f35f32df07f0" />
+  <summary><b>API specification</b></summary>
+<img width="1665" height="1389" alt="API specification" src="https://github.com/user-attachments/assets/b51c1360-2863-459b-a3d7-f35f32df07f0" />
 </details>
 <br>
 
 ---
 
-## 4. 사용한 핵심 기술 & 코드
+## 4. Core technologies and implementation
+
 <table>
   <thead>
     <tr>
-      <th>사용 기술</th>
-      <th>설명</th>
+      <th>Technology</th>
+      <th>What we built</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><b>Spring Security 기반 JWT 인증/인가</b></td>
+      <td><b>JWT authentication and authorization with Spring Security</b></td>
       <td>
-          Spring Security에서 JWT 필터를 구성해 인증·인가 규칙을 정의하고, STORE/STORE_TABLE 로그인 시 <code>Access·Refresh Token</code>을 발급했습니다. JWT는 무상태(stateless) 구조이므로 <code>RefreshToken</code>을 Redis에 저장해 고성능 관리가 가능하도록 했습니다. 로그인 유형별로 <code>payload</code>를 조립해 UUID 기반 테이블 아이디 등 필요한 값을 서비스 전역에서 활용할 수 있도록 <code>@Bean 객체</code>를 두었으며, 자동 로그인은 <code>Session Storage와 Local Storage</code>를 적절히 분리해 구현했습니다. 또한, 공공데이터포털 API를 연동하여 사업자등록번호 검증 절차를 적용했습니다.
-      </td>
-    <tr>
-      <td><b>Redis Pub/Sub 기반 실시간 메시징</b></td>
-      <td>
-        점주가 식자재 상태를 수정/삭제하거나 고객 태블릿에서 요청사항·주문을 전송하면,
-        서비스 계층에서 상태 변화를 즉시 계산하고 <code>Redis Pub/Sub</code> 채널로 이벤트를 발행합니다.  
-        이를 통해 다수의 구독자(테이블 단말기·대시보드)에 동시에 전달되며,
-        분산 환경에서도 이벤트 유실 없이 안정적으로 실시간 동기화가 이루어집니다.
+        We configured a JWT filter in Spring Security to define authentication and authorization rules, and issue an <code>access token</code> and a <code>refresh token</code> when a store (STORE) or a table device (STORE_TABLE) logs in. Because JWT is stateless, refresh tokens are stored in Redis for fast lookup and revocation. The token payload is assembled per login type, and a dedicated <code>@Bean</code> exposes values such as the UUID-based table ID across the service layer. Auto-login separates <code>sessionStorage</code> and <code>localStorage</code> by use case. Owner sign-up also verifies the business registration number through the Korean public data portal (ODcloud) API.
       </td>
     </tr>
     <tr>
-      <td><b>Server-Sent Events(SSE) 기반 상태 동기화</b></td>
+      <td><b>Real-time messaging with Redis Pub/Sub</b></td>
       <td>
-        백엔드에서 발생한 메뉴/요청 변경 이벤트를 SSE를 통해 단말기로 스트리밍 전송했습니다. 
-        Vue 프론트엔드(테블릿 앱·대시보드)는 별도 폴링 없이 항상 최신 상태를 유지할 수 있습니다.
+        When an owner updates or deletes an ingredient, or a customer tablet sends a request or an order, the service layer computes the state change immediately and publishes an event to a <code>Redis Pub/Sub</code> channel. Every subscriber (table devices and dashboards) receives it at the same time, keeping devices in sync even when the backend runs on multiple instances.
       </td>
     </tr>
     <tr>
-      <td><b>WebSocket 기반 실시간 주문 처리</b></td>
+      <td><b>State sync with Server-Sent Events (SSE)</b></td>
       <td>
-        <code>STOMP WebSocket</code>을 통해 주문 요청 이벤트를 실시간 전송하고, 
-        매장 대시보드는 <code>storeId</code> 기반 topic을, 테이블 단말은 <code>tableId</code> 기반 queue를 구독해 역할을 분리했습니다.  
-        Vue 프론트엔드 단말은 해당 채널을 구독하여 주문을 자동 반영하도록 구현해, 
-        지연 없이 항상 최신 주문 화면이 갱신됩니다.
+        Menu and request changes on the backend are streamed to devices over SSE, so the Vue frontends (table tablets and the owner dashboard) always show the latest state without polling.
       </td>
     </tr>
     <tr>
-      <td><b>카카오페이 QR 결제 연동</b></td>
+      <td><b>Real-time ordering with WebSocket (STOMP)</b></td>
       <td>
-        외부 결제 API인 카카오페이를 연동하여 QR 결제를 지원했습니다.  
-        <code>결제 준비 → QR 코드 생성/스캔 → 승인 콜백 → 결과 화면 리다이렉트</code>의 플로우를 구성해 안정적인 결제 프로세스를 제공했습니다.
+        Order events are sent in real time over <code>STOMP WebSocket</code>. The store dashboard subscribes to a <code>storeId</code>-based topic and each table device subscribes to a <code>tableId</code>-based queue, separating their roles. The Vue clients apply new orders automatically, so the order screen is always up to date.
+      </td>
+    </tr>
+    <tr>
+      <td><b>KakaoPay QR payment integration</b></td>
+      <td>
+        We integrated the KakaoPay payment API to support QR payments, with a flow of <code>payment ready → QR code generation/scan → approval callback → redirect to the result page</code>.
       </td>
     </tr>
   </tbody>
@@ -272,173 +283,184 @@ Jelly Order는 소상공인을 위한 경량형 오픈소스 테이블 오더·�
 
 ---
 
-## 5. 단위 테스트 결과서
+## 5. Deployment
 
-> 점주 페이지와 테이블 오더 페이지의 핵심 기능을 단위 테스트로 검증했습니다.  
-> 각 결과는 접을 수 있는 토글(`details`)로 제공하며, 이미지와 설명을 정렬했습니다.
+| Piece | Details |
+|---|---|
+| CI/CD | GitHub Actions builds a Docker image, pushes it to **Amazon ECR**, and rolls out the deployment on **Amazon EKS** on every push to `main` |
+| Kubernetes | Deployment + Service, **Horizontal Pod Autoscaler** (1–3 replicas), Ingress, in-cluster Redis |
+| TLS | cert-manager `ClusterIssuer` + `Certificate` for HTTPS |
+| AWS | EKS, ECR, S3, CloudFront, RDS/Aurora, Route 53, Certificate Manager, IAM, VPC |
 
+Manifests live in [`k8s/`](k8s) and the pipeline in [`.github/workflows/`](.github/workflows).
 
-### 📌 점주 페이지
+---
+
+## 6. Feature test results
+
+> We verified the core features of the owner console and the table-order tablet. Each result is in a collapsible section with screenshots.
+
+### 📌 Owner console
 <details>
-  <summary><b>회원가입 및 로그인</b></summary>
+  <summary><b>Sign-up and login</b></summary>
   
-  - **점주 회원가입**  
+  - **Owner sign-up**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/43680d12-01ba-4f90-8d4f-7e6965704932" alt="점주 회원 가입" width="720">
+      <img src="https://github.com/user-attachments/assets/43680d12-01ba-4f90-8d4f-7e6965704932" alt="screenshot" width="720">
     </p>
   
-  - **점주 일반 로그인**  
+  - **Owner login**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/b431146e-4368-4559-8c06-44291ab59692" alt="점주 일반로그인" width="720">
+      <img src="https://github.com/user-attachments/assets/b431146e-4368-4559-8c06-44291ab59692" alt="screenshot" width="720">
     </p>
   
-  - **점주 자동 로그인**  
+  - **Owner auto-login**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/3a68f0f8-9e06-4513-abcc-a30a9631e2a7" alt="점주 자동로그인" width="720">
+      <img src="https://github.com/user-attachments/assets/3a68f0f8-9e06-4513-abcc-a30a9631e2a7" alt="screenshot" width="720">
     </p>
 
-  - **아이디 찾기**  
+  - **Find username**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/99220b56-a342-4283-b39d-7465954cd054" alt="점주 아이디 찾기" width="720">
+      <img src="https://github.com/user-attachments/assets/99220b56-a342-4283-b39d-7465954cd054" alt="screenshot" width="720">
     </p>
 
-  - **비밀번호 재설정**  
+  - **Reset password**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/f0d92778-05ff-4068-afbc-3727e21502e2" alt="점주 비밀번호 재설정" width="720">
+      <img src="https://github.com/user-attachments/assets/f0d92778-05ff-4068-afbc-3727e21502e2" alt="screenshot" width="720">
     </p>
 </details>
 
 <details>
-  <summary><b>테이블 현황</b></summary>
+  <summary><b>Table status</b></summary>
 
-  - **구역 별 주문 테이블 조회**  
+  - **View ordering tables by zone**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/0db521d3-c686-4b13-9538-68711bf03a52" alt="구역 별 주문 테이블 조회" width="720">
+      <img src="https://github.com/user-attachments/assets/0db521d3-c686-4b13-9538-68711bf03a52" alt="screenshot" width="720">
     </p>
 
-  - **QR 결제 후 테이블 상태 변환**  
+  - **Table status change after QR payment**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/eee7ec00-0810-4648-bc99-dcb33b79cb1a" alt="QR 결제 후 상태 변환" width="720">
+      <img src="https://github.com/user-attachments/assets/eee7ec00-0810-4648-bc99-dcb33b79cb1a" alt="screenshot" width="720">
     </p>
 
-  - **카운터 결제**  
+  - **Counter payment**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/674e6a6a-7e93-455e-b80c-343aef914e7e" alt="카운터 결제" width="720">
+      <img src="https://github.com/user-attachments/assets/674e6a6a-7e93-455e-b80c-343aef914e7e" alt="screenshot" width="720">
     </p>
 
-  - **테이블 비우기**  
+  - **Clear a table**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/d5e6c6f5-a588-4372-adf4-bbb2d0876af8" alt="카운터 결제" width="720">
+      <img src="https://github.com/user-attachments/assets/d5e6c6f5-a588-4372-adf4-bbb2d0876af8" alt="screenshot" width="720">
     </p>
 
-  - **주문 수정**  
+  - **Edit an order**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/14d64ee4-fe28-418b-9345-a51e7153f3e0" alt="카운터 결제" width="720">
+      <img src="https://github.com/user-attachments/assets/14d64ee4-fe28-418b-9345-a51e7153f3e0" alt="screenshot" width="720">
     </p>
 </details>
 
 <details>
-  <summary><b>주문 현황</b></summary>
+  <summary><b>Order status</b></summary>
 
-  - **주문 접수 페이지 (접수 탭)**  
+  - **Order queue (Received tab)**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/f06d9dee-5260-4e89-9a31-bec36bb6c273" width="720">
     </p>
     
-  - **주문 접수 페이지 (완료 탭)**  
+  - **Order queue (Completed tab)**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/92b9335d-69ac-4f8f-b4a5-461c91bd1202" width="720">
     </p>
 
-  - **주문 접수 페이지 (취소 탭)**  
+  - **Order queue (Cancelled tab)**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/0c85ad12-07e4-4f37-9824-1bd5233de9cd" width="720">
     </p>
     
-  - **실시간 주문 확인**  
+  - **Real-time order check**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/3f330879-6b42-4359-b4f9-647f251f6872" width="720">
     </p>
 
-  - **조리 완료**  
+  - **Mark as cooked**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/5d7d0036-7118-4266-a042-a58685159562" width="720">
     </p>
 
-  - **조리 취소**  
+  - **Cancel cooking**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/ac051629-bcb0-4246-b293-cd525c17eb9d" width="720">
     </p>
 </details>
 
 <details>
-  <summary><b>메뉴 관리</b></summary>
+  <summary><b>Menu management</b></summary>
 
-  - **메뉴 페이지**  
+  - **Menu page**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/4a7618f2-1817-49aa-8d80-322b85c4300e" width="720">
     </p>
 
-  - **메뉴 생성 (옵션 추가)**  
+  - **Create menu (add options)**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/4040d775-de6d-4cac-8dbf-2165de76ba2c" width="720">
     </p>
 
-  - **메뉴 생성 (식자재 설정 및 추가)**  
+  - **Create menu (link ingredients)**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/661784de-255c-4c98-b093-6dea3d34c9f7" width="720">
     </p>
 
-  - **메뉴 수정 (식자재 소진 시 메뉴 품절)**  
+  - **Edit menu (auto sold-out when ingredients run out)**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/100132f8-5a50-4664-a66c-6ea66690a2da" width="720">
     </p>
 
-  - **메뉴 삭제**  
+  - **Delete menu**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/56d18fdf-eebc-4cdd-bc8f-1ab9e50b1d1d" width="720">
     </p>
 
-  - **메뉴 검색**  
+  - **Search menu**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/c65e3f9e-0b37-4385-81ac-196dec89f4ad" width="720">
     </p>
     
-  - **카테고리별 메뉴 조회**  
+  - **Browse menu by category**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/04735dfc-0fa5-4d4f-aa4a-63b1a8705cac" width="720">
     </p>
         
-  - **카테고리 생성 (중복 불가)**  
+  - **Create category (no duplicates)**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/5909c887-f8b1-47e5-a632-da3fc2b27148" width="720">
     </p>
 </details>
 
 <details>
-  <summary><b>식자재 관리</b></summary>
+  <summary><b>Ingredient management</b></summary>
   
-  - **식자재 관리 페이지**  
+  - **Ingredient management page**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/8b0c4cb0-c68d-4bb2-993e-6dc62ec5e91b" width="720">
     </p>
 
-  - **식자재 검색**  
+  - **Search ingredients**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/d077f4a8-feed-40b4-a6ce-bfc5eb4e4556" width="720">
     </p>
     
-  - **식자재 추가**  
+  - **Add ingredient**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/1418257f-615a-472d-8541-067a7336605d" width="720">
     </p>
 
-  - **식자재 수정**  
+  - **Edit ingredient**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/8bd52f97-1c99-43a8-8327-15b7f78ad1cf" width="720">
     </p>
 
-  - **식자재 삭제**  
+  - **Delete ingredient**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/16e3bcbf-af83-4015-a762-4d284ee905dc" width="720">
     </p>
@@ -448,74 +470,74 @@ Jelly Order는 소상공인을 위한 경량형 오픈소스 테이블 오더·�
 
 ---
 
-### 📌 테이블 오더
+### 📌 Table-order tablet
 <details>
-  <summary><b>주요 기능</b></summary>
+  <summary><b>Main features</b></summary>
 
-  - **대기 화면**  
+  - **Idle screen**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/afd3565a-5b1e-44b3-9c58-1b97094320f1" width="720">
     </p>
 
-  - **카테고리 선택**  
+  - **Choose a category**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/07a70800-979e-41e6-b517-fd40b81b0f63" width="720">
     </p>
     
-  - **레이아웃 변경**  
+  - **Switch layout**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/a7f501bb-f8f8-42cc-b21e-fff3e00abf24" width="720">
     </p>
 
-  - **요청사항 전송**  
+  - **Send a request to staff**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/0540c3af-c6b0-45b3-9976-1980a0e20637" width="720">
     </p>
 
-  - **메뉴 상세 페이지 + 메뉴 담기**  
+  - **Menu detail + add to cart**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/40bb14c4-01f6-469f-af61-9758ec436699" width="720">
     </p>
 
-  - **옵션 타입별 선택**  
+  - **Select options by type**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/1f3f30d9-a050-4c56-9066-249a8e628a8e" width="720">
     </p>
     
-  - **장바구니 수량 선택**  
+  - **Change cart quantity**  
     <p align="center">
       <img src="https://github.com/user-attachments/assets/df401c5c-590f-440e-9ccb-57ba28d2489b" width="720">
     </p>
     
-  - **품절된 메뉴 조회**  
+  - **View sold-out menu**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/592b79e4-dccf-47b3-9fe1-8e90bca6a213" alt=" storeTable 품절된 메뉴 조회" width="720">
+      <img src="https://github.com/user-attachments/assets/592b79e4-dccf-47b3-9fe1-8e90bca6a213" alt="screenshot" width="720">
     </p>
 
-  - **품절된 메뉴 주문**  
+  - **Try to order a sold-out menu**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/992cf2b5-7e2b-4895-be24-741a5c7f7fb6" alt=" storeTable 품절된 메뉴 주문" width="720">
+      <img src="https://github.com/user-attachments/assets/992cf2b5-7e2b-4895-be24-741a5c7f7fb6" alt="screenshot" width="720">
     </p>
     
-  - **한정 수량인 메뉴 주문**  
+  - **Order a limited-quantity menu**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/d22f5bb0-0362-463f-9123-dfd217a83598" alt=" storeTable 한정 수량인 메뉴 주문" width="720">
+      <img src="https://github.com/user-attachments/assets/d22f5bb0-0362-463f-9123-dfd217a83598" alt="screenshot" width="720">
     </p>
         
-  - **정상 주문**  
+  - **Place an order**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/537c4ed4-81d5-4167-94be-30de2f9ec02c" alt=" storeTable 정상 주문" width="720">
+      <img src="https://github.com/user-attachments/assets/537c4ed4-81d5-4167-94be-30de2f9ec02c" alt="screenshot" width="720">
     </p>
     
-  - **주문 내역 조회**  
+  - **View order history**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/d6ccd45f-038d-44a6-b252-cb9482ea43e4" alt=" storeTable 주문 내역 조회" width="720">
+      <img src="https://github.com/user-attachments/assets/d6ccd45f-038d-44a6-b252-cb9482ea43e4" alt="screenshot" width="720">
     </p>
 
-  - **QR 결제**  
+  - **QR payment**  
     <p align="center">
-      <img src="https://github.com/user-attachments/assets/5c60bfee-ff61-4d4b-9a89-5f57f87d24e2" alt=" storeTable QR 결제" width="720">
-      <img src="https://github.com/user-attachments/assets/f114d151-7382-4a0e-8bea-089697a3ee11" alt=" storeTable QR 결제2" width="720">
+      <img src="https://github.com/user-attachments/assets/5c60bfee-ff61-4d4b-9a89-5f57f87d24e2" alt="screenshot" width="720">
+      <img src="https://github.com/user-attachments/assets/f114d151-7382-4a0e-8bea-089697a3ee11" alt="screenshot" width="720">
     </p>
 </details>
 
